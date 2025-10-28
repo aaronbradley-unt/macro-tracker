@@ -40,7 +40,15 @@ npm start
 -(opens app in https://localhost:3000)
 
 
-
+Frontend Code
+Where: src/ folder
+Files: App.js, components in src/components/
+Purpose: Everything the user interacts with — UI, forms, displaying meals, buttons, etc.
+Examples:
+App.js → Main app layout, routes, page structure
+components/MealForm.js → Form to add meals
+components/MealList.js → Display list of meals
+components/Login.js → Login/signup UI
 
 
 
