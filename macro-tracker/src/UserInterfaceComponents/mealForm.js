@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { addMealToFirestore } from "../UserInterfaceComponents/mealServices";
 
+
+
 function MealForm({ addMeal, user }) {
   // state for the form inputs
   const [meal, setMeal] = useState({
