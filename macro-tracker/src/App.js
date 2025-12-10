@@ -18,7 +18,6 @@ function App() {
   });
   const [userInfo, setUserInfo] = useState(null);
 
-  // Watch for user authentication
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -26,7 +25,6 @@ function App() {
     return unsubscribe;
   }, []);
 
-  // Update totals whenever meals change
   useEffect(() => {
     const totalCalories = meals.reduce((sum, meal) => sum + Number(meal.calories || 0), 0);
     const totalProtein = meals.reduce((sum, meal) => sum + Number(meal.protein || 0), 0);
@@ -50,116 +48,69 @@ function App() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-        background: "linear-gradient(to right, #e0f7fa, #b2ebf2)",
-      }}
-    >
+    <div className="app-container">
       {!user ? (
-        <div
-          style={{
-            maxWidth: "400px",
-            margin: "50px auto",
-            padding: "30px",
-            backgroundColor: "#ffffff",
-            borderRadius: "10px",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-          }}
-        >
-          <LogIn setUser={setUser} />
-        </div>
+        <LogIn setUser={setUser} />
       ) : (
-        <div
-          style={{
-            maxWidth: "800px",
-            margin: "20px auto",
-            padding: "20px",
-            backgroundColor: "#ffffff",
-            borderRadius: "15px",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <h1 style={{ color: "#0077b6" }}>Welcome, {user.email}</h1>
-            <button
-              onClick={() => signOut(auth)}
-              style={{
-                backgroundColor: "#00b4d8",
-                color: "#fff",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Logout
+        <div className="main-container">
+          <header className="header">
+            <div>
+              <h1>Macro Tracker</h1>
+              <p className="user-email">{user.email}</p>
+            </div>
+            <button onClick={() => signOut(auth)} className="btn-logout">
+              Sign Out
             </button>
-          </div>
+          </header>
 
-          {/* User Info Form */}
           <UserInfo onSubmit={handleUserInfoSubmit} />
 
-          {/* Display user info */}
           {userInfo && (
-            <div
-              style={{
-                marginTop: "20px",
-                padding: "15px",
-                backgroundColor: "#f1f8e9",
-                borderRadius: "10px",
-              }}
-            >
-              <h2 style={{ color: "#558b2f" }}>Your Info:</h2>
-              <p>
-                <strong>Weight:</strong> {userInfo.weight} kg
-              </p>
-              <p>
-                <strong>Height:</strong> {userInfo.height} cm
-              </p>
-              <p>
-                <strong>Activity Level:</strong> {userInfo.activity}
-              </p>
+            <div className="card">
+              <h2>Your Stats</h2>
+              <div className="info-display">
+                <div className="info-item">
+                  <div className="value">{userInfo.weight}</div>
+                  <div className="label">kg</div>
+                </div>
+                <div className="info-item">
+                  <div className="value">{userInfo.height}</div>
+                  <div className="label">cm</div>
+                </div>
+                <div className="info-item">
+                  <div className="value" style={{ fontSize: '18px', textTransform: 'capitalize' }}>
+                    {userInfo.activity}
+                  </div>
+                  <div className="label">Activity</div>
+                </div>
+              </div>
             </div>
           )}
 
-          {/* Meal Form */}
           <MealForm addMeal={addMeal} user={user} />
 
-          {/* Meal List */}
           <MealList meals={meals} />
 
-          {/* Daily Totals */}
-          <div
-            style={{
-              marginTop: "30px",
-              padding: "15px",
-              backgroundColor: "#fff3e0",
-              borderRadius: "10px",
-            }}
-          >
-            <h2 style={{ color: "#e65100" }}>Daily Total Macros</h2>
-            <p>
-              <strong>Calories:</strong> {totals.calories}
-            </p>
-            <p>
-              <strong>Protein:</strong> {totals.protein} g
-            </p>
-            <p>
-              <strong>Carbs:</strong> {totals.carbs} g
-            </p>
-            <p>
-              <strong>Fat:</strong> {totals.fat} g
-            </p>
+          <div className="card">
+            <h2>Daily Totals</h2>
+            <div className="totals-grid">
+              <div className="total-card calories">
+                <div className="value">{totals.calories}</div>
+                <div className="label">Calories</div>
+              </div>
+              <div className="total-card protein">
+                <div className="value">{totals.protein}<span className="unit">g</span></div>
+                <div className="label">Protein</div>
+              </div>
+              <div className="total-card carbs">
+                <div className="value">{totals.carbs}<span className="unit">g</span></div>
+                <div className="label">Carbs</div>
+              </div>
+              <div className="total-card fat">
+                <div className="value">{totals.fat}<span className="unit">g</span></div>
+                <div className="label">Fat</div>
+              </div>
+            </div>
           </div>
         </div>
       )}

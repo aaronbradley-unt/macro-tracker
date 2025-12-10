@@ -1,12 +1,7 @@
-// this component collects meal data from the user and sends it
-// to the parent component (App.js) to store the data
 import { useState } from "react";
 import { addMealToFirestore } from "../UserInterfaceComponents/mealServices";
 
-
-
 function MealForm({ addMeal, user }) {
-  // state for the form inputs
   const [meal, setMeal] = useState({
     name: "",
     calories: "",
@@ -15,35 +10,86 @@ function MealForm({ addMeal, user }) {
     fat: ""
   });
 
-  // handle input changes
   const handleChange = (e) => {
     setMeal({ ...meal, [e.target.name]: e.target.value });
   };
 
-  // handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    addMeal(meal); // update local state in App.js
+    addMeal(meal);
 
     if (user) {
-      await addMealToFirestore(meal, user.uid); // save to Firestore
+      await addMealToFirestore(meal, user.uid);
     } else {
       console.log("User not logged in");
     }
 
-    // reset the form
     setMeal({ name: "", calories: "", protein: "", carbs: "", fat: "" });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="name" value={meal.name} onChange={handleChange} placeholder="Meal Name" required />
-      <input name="calories" value={meal.calories} onChange={handleChange} placeholder="Calories" required />
-      <input name="protein" value={meal.protein} onChange={handleChange} placeholder="Protein (g)" required />
-      <input name="carbs" value={meal.carbs} onChange={handleChange} placeholder="Carbs (g)" required />
-      <input name="fat" value={meal.fat} onChange={handleChange} placeholder="Fat (g)" required />
-      <button type="submit">Add Meal</button>
-    </form>
+    <div className="card">
+      <h2>Add a Meal</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-grid">
+          <div className="form-group">
+            <label>Meal Name</label>
+            <input 
+              name="name" 
+              value={meal.name} 
+              onChange={handleChange} 
+              placeholder="Breakfast, Lunch..." 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Calories</label>
+            <input 
+              name="calories" 
+              type="number"
+              value={meal.calories} 
+              onChange={handleChange} 
+              placeholder="500" 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Protein (g)</label>
+            <input 
+              name="protein" 
+              type="number"
+              value={meal.protein} 
+              onChange={handleChange} 
+              placeholder="30" 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Carbs (g)</label>
+            <input 
+              name="carbs" 
+              type="number"
+              value={meal.carbs} 
+              onChange={handleChange} 
+              placeholder="50" 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Fat (g)</label>
+            <input 
+              name="fat" 
+              type="number"
+              value={meal.fat} 
+              onChange={handleChange} 
+              placeholder="20" 
+              required 
+            />
+          </div>
+        </div>
+        <button type="submit" className="btn-submit">Add Meal</button>
+      </form>
+    </div>
   );
 }
 
